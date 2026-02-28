@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Universitaria</title>
+    <meta name="description"
+        content="Calculadora interactiva para estudiantes universitarios. Calcula tu progreso en cursos y tu Promedio General Acumulado (PGA).">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome/Icons (Lucide icons via script for better look) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-mesh"></div>
+
+    <main class="app-container">
+        <!-- Header / Nav -->
+        <header class="header">
+            <div class="logo">
+                <i data-lucide="calculator" class="logo-icon"></i>
+                <h1>Calculadora<br><span>Universitaria</span></h1>
+            </div>
+            <nav class="tabs">
+                <button class="tab-btn active" id="tab-curso" onclick="switchTab('curso')">
+                    <i data-lucide="book-open"></i> Curso
+                </button>
+                <button class="tab-btn" id="tab-pga" onclick="switchTab('pga')">
+                    <i data-lucide="bar-chart-2"></i> PGA
+                </button>
+            </nav>
+        </header>
+
+        <!-- Vista de Calculadora por Curso -->
+        <section id="view-curso" class="view active">
+            <div class="glass-card">
+                <div class="input-group">
+                    <label for="courseName"><i data-lucide="tag"></i> Nombre del Curso</label>
+                    <input type="text" id="courseName" placeholder="Ej. Matemática Básica">
+                </div>
+
+                <div class="components-grid">
+                    <!-- Unidad 1 -->
+                    <div class="component-card" id="comp-u1">
+                        <div class="comp-header">
+                            <h3>Unidad 1</h3>
+                            <span class="badge">20%</span>
+                        </div>
+                        <div class="comp-body">
+                            <label class="switch-label">
+                                <input type="checkbox" id="check-sub-u1" onchange="toggleSubnotes('u1')">
+                                <span class="slider"></span>
+                                Tiene sub-notas
+                            </label>
+
+                            <div id="single-u1" class="single-input active">
+                                <input type="number" id="nota-u1" placeholder="Nota Final (0-20)" min="0" max="20"
+                                    step="0.1">
+                            </div>
+
+                            <div id="multi-u1" class="multi-input">
+                                <div id="subnotes-list-u1" class="subnotes-list"></div>
+                                <button class="btn-secondary btn-sm" onclick="addSubnote('u1')">
+                                    <i data-lucide="plus"></i> Añadir sub-nota
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Parcial -->
+                    <div class="component-card" id="comp-parcial">
+                        <div class="comp-header">
+                            <h3>Examen Parcial</h3>
+                            <span class="badge">25%</span>
+                        </div>
+                        <div class="comp-body">
+                            <div class="single-input active">
+                                <input type="number" id="nota-parcial" placeholder="Nota (0-20)" min="0" max="20"
+                                    step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Unidad 2 -->
+                    <div class="component-card" id="comp-u2">
+                        <div class="comp-header">
+                            <h3>Unidad 2</h3>
+                            <span class="badge">20%</span>
+                        </div>
+                        <div class="comp-body">
+                            <label class="switch-label">
+                                <input type="checkbox" id="check-sub-u2" onchange="toggleSubnotes('u2')">
+                                <span class="slider"></span>
+                                Tiene sub-notas
+                            </label>
+
+                            <div id="single-u2" class="single-input active">
+                                <input type="number" id="nota-u2" placeholder="Nota Final (0-20)" min="0" max="20"
+                                    step="0.1">
+                            </div>
+
+                            <div id="multi-u2" class="multi-input">
+                                <div id="subnotes-list-u2" class="subnotes-list"></div>
+                                <button class="btn-secondary btn-sm" onclick="addSubnote('u2')">
+                                    <i data-lucide="plus"></i> Añadir sub-nota
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final -->
+                    <div class="component-card" id="comp-final">
+                        <div class="comp-header">
+                            <h3>Examen Final</h3>
+                            <span class="badge">35%</span>
+                        </div>
+                        <div class="comp-body">
+                            <div class="single-input active">
+                                <input type="number" id="nota-final" placeholder="Nota (0-20)" min="0" max="20"
+                                    step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary calculate-btn" onclick="calculateCourse()">
+                    <i data-lucide="zap"></i> Calcular Rendimiento
+                </button>
+            </div>
+
+            <!-- Resultados Curso -->
+            <div id="result-curso" class="glass-card result-panel hidden">
+                <h2 id="res-course-title">Resumen del Curso</h2>
+
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span>Progreso del Curso</span>
+                        <span id="res-porcentaje">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="res-progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="score-display">
+                    <h3>Nota Acumulada</h3>
+                    <div class="score-number"><span id="res-puntos">0.00</span> <span class="gray">/ 20</span></div>
+                </div>
+
+                <div id="res-metas-container" class="hidden">
+                    <h3>Metas para Aprobar</h3>
+                    <p class="subtitle-metas">Esto es lo que necesitas sacar en el resto del curso para lograr estas
+                        notas:</p>
+                    <table class="metas-table">
+                        <thead>
+                            <tr>
+                                <th>Meta Final</th>
+                                <th>Necesitas Sacar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="res-metas-body">
+                            <!-- Filas dinámicas -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="res-final-message" class="final-status-msg hidden">
+                    <!-- Aprobado o Reprobado -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Vista de Calculadora PGA -->
+        <section id="view-pga" class="view">
+            <div class="glass-card">
+                <div class="pga-header">
+                    <h2>Tus Cursos</h2>
+                    <p>Ingresa tus cursos para calcular el Promedio General Acumulado.</p>
+                </div>
+
+                <div class="pga-list" id="pga-courses-list">
+                    <!-- Filas de cursos PGA -->
+                </div>
+
+                <div class="pga-actions">
+                    <button class="btn-secondary" onclick="addPgaCourse()">
+                        <i data-lucide="plus-circle"></i> Añadir Curso
+                    </button>
+                    <button class="btn-primary" onclick="calculatePga()">
+                        <i data-lucide="calculator"></i> Calcular PGA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resultados PGA -->
+            <div id="result-pga" class="glass-card result-panel pga-result hidden">
+                <h2>Tu Promedio General Acumulado</h2>
+                <div class="score-display">
+                    <div class="score-number pga-huge" id="res-pga-value">0.00</div>
+                </div>
+                <p id="pga-msg" class="pga-msg">Sigue esforzándote para subir ese promedio!</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Script principal -->
+    <script src="script.js"></script>
+    <!-- Inicializar iconos -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
