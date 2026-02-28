@@ -3,7 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <!-- Evitar que safari / navegadores moviles coloreen la barra de estado -->
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- Permitir usar como PWA o agregar a pantalla principal -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <title>Calculadora Universitaria</title>
     <meta name="description"
         content="Calculadora interactiva para estudiantes universitarios. Calcula tu progreso en cursos y tu Promedio General Acumulado (PGA).">
@@ -168,6 +177,12 @@
                 <div id="res-final-message" class="final-status-msg hidden">
 
                 </div>
+
+                <div style="margin-top: 1.5rem; display: flex; justify-content: center;">
+                    <button class="btn-secondary" onclick="resetCourse()">
+                        <i data-lucide="rotate-ccw"></i> Nuevo Cálculo
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -198,6 +213,11 @@
                     <div class="score-number pga-huge" id="res-pga-value">0.00</div>
                 </div>
                 <p id="pga-msg" class="pga-msg">Sigue esforzándote para subir ese promedio!</p>
+                <div style="margin-top: 1.5rem; display: flex; justify-content: center;">
+                    <button class="btn-secondary" onclick="resetPga()">
+                        <i data-lucide="rotate-ccw"></i> Nuevo Cálculo
+                    </button>
+                </div>
             </div>
         </section>
     </main>

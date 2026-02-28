@@ -44,7 +44,7 @@ function addSubnote(compId) {
         <button class="btn-remove" onclick="this.parentElement.remove()" title="Eliminar"><i data-lucide="trash-2"></i></button>
     `;
     list.appendChild(div);
-    lucide.createIcons(); 
+    lucide.createIcons();
 }
 
 function calculateComponent(compId) {
@@ -102,7 +102,7 @@ function calculateCourse() {
 
     document.getElementById('res-porcentaje').innerText = `${sumaProcentaje.toFixed(1)}%`;
     const bar = document.getElementById('res-progress-fill');
-    bar.style.width = '0%'; 
+    bar.style.width = '0%';
     setTimeout(() => {
         bar.style.width = `${sumaProcentaje}%`;
         bar.style.backgroundColor = sumaProcentaje >= 100 ? 'var(--success)' : 'var(--warning)';
@@ -119,7 +119,7 @@ function calculateCourse() {
 
     if (sumaProcentaje < 100) {
         metasCont.classList.remove('hidden');
-        finalMsg.classList.add('hidden'); 
+        finalMsg.classList.add('hidden');
 
         const porcentajeRestante = 100 - sumaProcentaje;
         const factorRestante = porcentajeRestante / 100.0;
@@ -170,6 +170,32 @@ function calculateCourse() {
     }
 }
 
+function resetCourse() {
+    // 1. Limpiar nombre del curso
+    document.getElementById('courseName').value = '';
+
+    // 2. Limpiar todos los inputs numéricos (notas de single y subnotas)
+    const viewCurso = document.getElementById('view-curso');
+    viewCurso.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
+
+    // 3. Resetear los switches de subnotas a OFF
+    const ids = ['u1', 'u2'];
+    ids.forEach(compId => {
+        const checkbox = document.getElementById(`check-sub-${compId}`);
+        if (checkbox && checkbox.checked) {
+            checkbox.checked = false;
+            toggleSubnotes(compId); // Esto volverá a ocultar la lista multi-input y mostrar single-input
+        }
+        // Vaciar la lista de subnotas para que empiece de cero la próxima vez
+        document.getElementById(`subnotes-list-${compId}`).innerHTML = '';
+    });
+
+    // 4. Ocultar el panel de resultados completo
+    document.getElementById('result-curso').classList.add('hidden');
+
+    showToast('Calculadora de curso reiniciada', 'success');
+}
+
 function addPgaCourse() {
     const list = document.getElementById('pga-courses-list');
     const rowCount = list.children.length + 1;
@@ -209,10 +235,34 @@ function calculatePga() {
         const pga = sumaProductos / sumaCreditos;
         document.getElementById('result-pga').classList.remove('hidden');
         document.getElementById('res-pga-value').innerText = pga.toFixed(2);
+
+        let msg = "";
+        if (pga < 10.5) {
+            msg = "¡Alerta Roja! Tu ciclo está en peligro. ¡Cuidado!";
+        } else if (pga >= 10.5 && pga < 15) {
+            msg = "Aprobado, pero tranquilo. Sigue esforzándote para subir ese promedio.";
+        } else {
+            msg = "¡Excelente promedio! Sigue así, estás volando alto.";
+        }
+        document.getElementById('pga-msg').innerText = msg;
+
         showToast(`Tu PGA ha sido calculado.`, "success");
     } else {
         showToast("No se ingresaron créditos válidos.", "error");
     }
+}
+
+function resetPga() {
+    // 1. Ocultar el panel de resultados
+    document.getElementById('result-pga').classList.add('hidden');
+
+    // 2. Vaciar toda la lista de cursos
+    document.getElementById('pga-courses-list').innerHTML = '';
+
+    // 3. Añadir una fila vacía para empezar de nuevo
+    addPgaCourse();
+
+    showToast('Calculadora de PGA reiniciada', 'success');
 }
 
 function showToast(message, type = "success") {
@@ -230,7 +280,7 @@ function showToast(message, type = "success") {
 
     setTimeout(() => {
         toast.style.animation = "fadeOut 0.4s ease forwards";
-        setTimeout(() => toast.remove(), 400); 
+        setTimeout(() => toast.remove(), 400);
     }, 3500);
 }
 

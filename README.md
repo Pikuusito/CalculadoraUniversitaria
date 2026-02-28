@@ -1,48 +1,54 @@
-# Calculadora Universitaria en C++ 🧮
+# Calculadora Universitaria 🧮
 
-Una herramienta de consola interactiva diseñada para estudiantes universitarios, escrita en C++. Permite calcular rápidamente el progreso y la nota final de un curso específico, así como el Promedio General Acumulado (PGA) de todos los cursos.
+Una herramienta de cálculo diseñada especialmente para estudiantes universitarios. Permite calcular rápidamente el progreso y la nota final de un curso específico, así como el Promedio General Acumulado (PGA) de todos tus cursos ponderado por créditos.
 
-## ✨ Características Principales
+El proyecto cuenta con **dos versiones** que comparten la misma lógica matemática subyacente: una versión web moderna y una versión clásica de consola en C++.
 
-*   **Interfaz de Consola Amigable:** Interfaz text-based robusta con uso de colores para mejorar la legibilidad y la experiencia de usuario.
-*   **Cálculo de Notas de Curso:**
-    *   Soporta la división de un curso en múltiples componentes (Unidad 1, Examen Parcial, Unidad 2, Examen Final), con pesos.
-    *   Permite el ingreso de sub-notas (por ejemplo, múltiples prácticas o tareas dentro de una misma unidad).
-    *   Muestra un reporte final detallado y una barra de progreso visual de cuánto porcentaje del curso se ha completado.
-    *   Calcula cuánto necesitas en las evaluaciones restantes para alcanzar diferentes promedios de aprobación (desde 10.5 hasta 20).
-*   **Cálculo de PGA (Promedio General Acumulado):**
-    *   Ingresa múltiples cursos, sus notas y la cantidad de créditos correspondientes.
-    *   Calcula el promedio ponderado exacto de tu ciclo o carrera.
-*   **Ventanas Emergentes Nativas (Pop-ups):** Utiliza la API de Windows (`MessageBoxA`) en hilos independientes (`std::thread`) para mostrar resultados y alertas sin bloquear el flujo de la consola.
-*   **Manejo de Errores Riguroso:** Blindado contra entradas incorrectas del usuario (como ingresar letras en lugar de números o nombres con múltiples espacios).
+## ✨ Versión Web (Recomendada)
 
-## 🚀 Cómo Empezar
+La versión web es una aplicación interactiva, moderna y 100% responsiva (Mobile-First) diseñada para ser utilizada desde cualquier dispositivo. 
 
-### Requisitos Previos
+**Características de la Web:**
+*   **Diseño Premium:** Interfaz oscura (Dark Mode) utilizando principios de *Glassmorphism*, con ventanas translúcidas, colores vibrantes y animaciones fluidas al interactuar con los elementos.
+*   **Totalmente Dinámica:** Añade sub-notas o múltiples cursos para tu PGA al instante sin tener que recargar la página.
+*   **Barra de Progreso Visual:** Observa cómo se llena en vivo el porcentaje de tu curso a medida que introduces notas.
+*   **Sistema de Metas:** Si aún no completas el curso, la calculadora te dice exactamente qué nota necesitas en el resto de tus evaluaciones para lograr promedios desde 10.5 hasta 20.
+*   **Notificaciones Emergentes (Toasts):** Alertas visuales no obstructivas al calcular información o cometer errores.
 
-*   Sistema Operativo **Windows** (debido al uso de `<windows.h>` para colores de consola y ventanas emergentes).
-*   Un compilador de C++ (como **MinGW** / `g++`).
+**🌐 Pruébalo ahora mismo:**
+La aplicación está construida únicamente con HTML5, CSS3 y Vanilla JavaScript, lo que la hace ultra ligera y perfecta para alojar gratuitamente en plataformas como Vercel o GitHub Pages.
+Para ejecutarla localmente, simplemente abre el archivo `web/index.html` en tu navegador de preferencia.
 
-### Instalación y Compilación
+---
 
-1.  Clona este repositorio o descarga el código fuente:
+## 💻 Versión Consola (C++)
+
+Para aquellos que prefieren la velocidad y simplicidad de la terminal nativa, la versión original escrita en C++ ofrece una experiencia textual enriquecida y robusta.
+
+**Características de la Consola:**
+*   **Interfaz CLI Amigable:** Uso de colores de consola nativos para los menús y tablas de resultados.
+*   **Diálogos Nativos (Pop-ups):** Integración con la API de Windows (`MessageBoxA`) utilizando hilos independientes (`std::thread`), para mostrar ventanas reales de Windows sin congelar la terminal de comandos.
+*   **Manejo de Errores Riguroso:** Sistema blindado capaz de sobrevivir a entradas múltiples e incorrectas (letras en lugares de números, nombres de cursos con múltiples espacios, etc).
+
+### Requisitos Previos (C++)
+*   Sistema Operativo **Windows** (debido al uso de `<windows.h>`).
+*   Un compilador de C++ (ejemplo: MinGW / `g++`).
+
+### Compilación (C++)
+1.  Clona este repositorio:
     ```bash
-    git clone https://github.com/Pikuusito/CalculadoraPromedio.git
-    cd CalculadoraPromedio
+    git clone https://github.com/Pikuusito/CalculadoraUniversitaria.git
+    cd CalculadoraUniversitaria
     ```
-
-2.  Compila el archivo `calculadora.cpp` desde tu terminal:
+2.  Compilado de `calculadora.cpp`:
     ```bash
     g++ calculadora.cpp -o calculadora
     ```
-
-3.  Ejecuta el programa:
+3.  Ejecución en terminal:
     ```bash
-    .\calculadora
+    .\calculadora.exe
     ```
 
 ## 🛠️ Tecnologías Usadas
-
-*   **C++ Estándar:** `iostream`, `string`, `vector`, `iomanip`, `thread`.
-*   **Windows API:** `windows.h` (Para la personalización visual de la consola y diálogos nativos).
-
+*   **Web Frontend:** HTML5, CSS3 variables, Vanilla JS, Lucide Icons.
+*   **Backend Analógico:** C++ (Librerías estándar + `windows.h` + `thread`).
