@@ -1,16 +1,13 @@
-// === NAVEGACIÓN DE VISTAS ===
+
 function switchTab(tab) {
-    // Buttons
+
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`tab-${tab}`).classList.add('active');
 
-    // Views
     document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
     document.getElementById(`view-${tab}`).classList.add('active');
 }
 
-// === LÓGICA DE CURSO ===
-// Pesos estáticos (quemados en C++)
 const pesos = {
     u1: 0.20,
     parcial: 0.25,
@@ -27,7 +24,7 @@ function toggleSubnotes(compId) {
     if (isChecked) {
         single.classList.remove('active');
         multi.classList.add('active');
-        // Si está vacío, añadir 1 por defecto
+
         if (document.getElementById(`subnotes-list-${compId}`).children.length === 0) {
             addSubnote(compId);
         }
@@ -47,14 +44,13 @@ function addSubnote(compId) {
         <button class="btn-remove" onclick="this.parentElement.remove()" title="Eliminar"><i data-lucide="trash-2"></i></button>
     `;
     list.appendChild(div);
-    lucide.createIcons(); // Reactualiza iconos
+    lucide.createIcons(); 
 }
 
 function calculateComponent(compId) {
     let acumuladoInterno = 0;
     let porcentajeInternoCompletado = 0;
 
-    // Tiene subnotas? (u1, u2)
     const toggle = document.getElementById(`check-sub-${compId}`);
     const hasSubnotes = toggle ? toggle.checked : false;
 
@@ -102,22 +98,18 @@ function calculateCourse() {
     const cName = document.getElementById('courseName').value.trim();
     document.getElementById('res-course-title').innerText = cName ? `Resumen: ${cName}` : "Resumen del Curso";
 
-    // Mostrar panel
     document.getElementById('result-curso').classList.remove('hidden');
 
-    // Progreso
     document.getElementById('res-porcentaje').innerText = `${sumaProcentaje.toFixed(1)}%`;
     const bar = document.getElementById('res-progress-fill');
-    bar.style.width = '0%'; // Reset para animar
+    bar.style.width = '0%'; 
     setTimeout(() => {
         bar.style.width = `${sumaProcentaje}%`;
         bar.style.backgroundColor = sumaProcentaje >= 100 ? 'var(--success)' : 'var(--warning)';
     }, 100);
 
-    // Puntos
     document.getElementById('res-puntos').innerText = sumaPuntos.toFixed(2);
 
-    // Lógica final
     const metasCont = document.getElementById('res-metas-container');
     const metasBody = document.getElementById('res-metas-body');
     const finalMsg = document.getElementById('res-final-message');
@@ -127,7 +119,7 @@ function calculateCourse() {
 
     if (sumaProcentaje < 100) {
         metasCont.classList.remove('hidden');
-        finalMsg.classList.add('hidden'); // Ocultar msj final hasta 100%
+        finalMsg.classList.add('hidden'); 
 
         const porcentajeRestante = 100 - sumaProcentaje;
         const factorRestante = porcentajeRestante / 100.0;
@@ -162,7 +154,7 @@ function calculateCourse() {
         }
 
     } else {
-        // Curso 100%
+
         metasCont.classList.add('hidden');
         finalMsg.classList.remove('hidden');
 
@@ -177,8 +169,6 @@ function calculateCourse() {
         }
     }
 }
-
-// === LÓGICA DE PGA ===
 
 function addPgaCourse() {
     const list = document.getElementById('pga-courses-list');
@@ -225,13 +215,11 @@ function calculatePga() {
     }
 }
 
-// === TOAST SYSTEM ===
 function showToast(message, type = "success") {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
 
-    // Icon based on type
     const icon = type === "success"
         ? '<i data-lucide="check-circle"></i>'
         : '<i data-lucide="alert-circle"></i>';
@@ -240,14 +228,12 @@ function showToast(message, type = "success") {
     container.appendChild(toast);
     lucide.createIcons();
 
-    // Eliminar tras 3.5s
     setTimeout(() => {
         toast.style.animation = "fadeOut 0.4s ease forwards";
-        setTimeout(() => toast.remove(), 400); // Dar chance a animar final
+        setTimeout(() => toast.remove(), 400); 
     }, 3500);
 }
 
-// Inicializar un curso en PGA al abrir
 window.onload = () => {
     addPgaCourse();
 }

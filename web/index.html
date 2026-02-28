@@ -8,15 +8,12 @@
     <meta name="description"
         content="Calculadora interactiva para estudiantes universitarios. Calcula tu progreso en cursos y tu Promedio General Acumulado (PGA).">
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- FontAwesome/Icons (Lucide icons via script for better look) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Estilos -->
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -24,7 +21,7 @@
     <div class="background-mesh"></div>
 
     <main class="app-container">
-        <!-- Header / Nav -->
+
         <header class="header">
             <div class="logo">
                 <i data-lucide="calculator" class="logo-icon"></i>
@@ -40,7 +37,6 @@
             </nav>
         </header>
 
-        <!-- Vista de Calculadora por Curso -->
         <section id="view-curso" class="view active">
             <div class="glass-card">
                 <div class="input-group">
@@ -49,7 +45,7 @@
                 </div>
 
                 <div class="components-grid">
-                    <!-- Unidad 1 -->
+
                     <div class="component-card" id="comp-u1">
                         <div class="comp-header">
                             <h3>Unidad 1</h3>
@@ -76,7 +72,6 @@
                         </div>
                     </div>
 
-                    <!-- Parcial -->
                     <div class="component-card" id="comp-parcial">
                         <div class="comp-header">
                             <h3>Examen Parcial</h3>
@@ -90,7 +85,6 @@
                         </div>
                     </div>
 
-                    <!-- Unidad 2 -->
                     <div class="component-card" id="comp-u2">
                         <div class="comp-header">
                             <h3>Unidad 2</h3>
@@ -117,7 +111,6 @@
                         </div>
                     </div>
 
-                    <!-- Final -->
                     <div class="component-card" id="comp-final">
                         <div class="comp-header">
                             <h3>Examen Final</h3>
@@ -137,7 +130,6 @@
                 </button>
             </div>
 
-            <!-- Resultados Curso -->
             <div id="result-curso" class="glass-card result-panel hidden">
                 <h2 id="res-course-title">Resumen del Curso</h2>
 
@@ -168,18 +160,17 @@
                             </tr>
                         </thead>
                         <tbody id="res-metas-body">
-                            <!-- Filas dinámicas -->
+
                         </tbody>
                     </table>
                 </div>
 
                 <div id="res-final-message" class="final-status-msg hidden">
-                    <!-- Aprobado o Reprobado -->
+
                 </div>
             </div>
         </section>
 
-        <!-- Vista de Calculadora PGA -->
         <section id="view-pga" class="view">
             <div class="glass-card">
                 <div class="pga-header">
@@ -188,7 +179,7 @@
                 </div>
 
                 <div class="pga-list" id="pga-courses-list">
-                    <!-- Filas de cursos PGA -->
+
                 </div>
 
                 <div class="pga-actions">
@@ -201,7 +192,6 @@
                 </div>
             </div>
 
-            <!-- Resultados PGA -->
             <div id="result-pga" class="glass-card result-panel pga-result hidden">
                 <h2>Tu Promedio General Acumulado</h2>
                 <div class="score-display">
@@ -212,12 +202,10 @@
         </section>
     </main>
 
-    <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Script principal -->
     <script src="script.js"></script>
-    <!-- Inicializar iconos -->
+
     <script>
         lucide.createIcons();
     </script>
