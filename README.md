@@ -17,7 +17,7 @@ La versión web es una aplicación interactiva, moderna y 100% responsiva (Mobil
 
 **🌐 Pruébalo ahora mismo:**
 La aplicación está construida únicamente con HTML5, CSS3 y Vanilla JavaScript, lo que la hace ultra ligera y perfecta para alojar gratuitamente en plataformas como Vercel o GitHub Pages.
-Para ejecutarla localmente, simplemente abre el archivo `web/index.html` en tu navegador de preferencia.
+Para ejecutarla localmente, simplemente abre el archivo `https://calculadorauniversitaria.vercel.app` en tu navegador de preferencia.
 
 ---
 

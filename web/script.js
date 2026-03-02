@@ -87,8 +87,6 @@ function validateCourse() {
                 continue;
             }
 
-            let sumaPesos = 0;
-            let tieneAlgunDato = false;
 
             for (let item of subnotes) {
                 const pesoInput = item.querySelector('.sub-peso');
@@ -99,39 +97,36 @@ function validateCourse() {
                 // Si ambos estan vacios, saltar
                 if (pesoVal === "" && notaVal === "") continue;
 
-                tieneAlgunDato = true;
-                hasAnyData = true;
-
                 const peso = parseFloat(pesoVal);
                 const nota = parseFloat(notaVal);
 
-                // Validar peso
-                if (pesoVal === "" || isNaN(peso)) {
+                // Tiene nota pero no peso: error (necesitamos saber cuanto vale)
+                if (notaVal !== "" && (pesoVal === "" || isNaN(peso))) {
                     markInvalid(pesoInput);
-                    errors.push(`${nombre}: Falta el peso en una sub-nota.`);
-                } else if (peso < 0 || peso > 100) {
-                    markInvalid(pesoInput);
-                    errors.push(`${nombre}: El peso debe estar entre 0 y 100.`);
-                } else {
-                    sumaPesos += peso;
+                    errors.push(`${nombre}: Una sub-nota tiene nota pero le falta el peso.`);
                 }
 
-                // Validar nota
-                if (notaVal === "" || isNaN(nota)) {
-                    markInvalid(notaInput);
-                    errors.push(`${nombre}: Falta la nota en una sub-nota.`);
-                } else if (nota < 0 || nota > 20) {
-                    markInvalid(notaInput);
-                    errors.push(`${nombre}: La nota debe estar entre 0 y 20.`);
+                // Validar rango del peso si esta presente
+                if (pesoVal !== "" && !isNaN(peso)) {
+                    if (peso < 0 || peso > 100) {
+                        markInvalid(pesoInput);
+                        errors.push(`${nombre}: El peso debe estar entre 0 y 100.`);
+                    }
                 }
-            }
 
-            if (tieneAlgunDato && Math.abs(sumaPesos - 100) > 0.01) {
-                // Marcar todos los pesos de esta unidad
-                for (let item of subnotes) {
-                    markInvalid(item.querySelector('.sub-peso'));
+                // Validar rango de la nota si esta presente
+                if (notaVal !== "" && !isNaN(nota)) {
+                    hasAnyData = true;
+                    if (nota < 0 || nota > 20) {
+                        markInvalid(notaInput);
+                        errors.push(`${nombre}: La nota debe estar entre 0 y 20.`);
+                    }
                 }
-                errors.push(`${nombre}: Los pesos suman ${sumaPesos.toFixed(1)}%, deben sumar 100%.`);
+
+                // Peso con nota = dato completo
+                if (pesoVal !== "" && notaVal !== "" && !isNaN(peso) && !isNaN(nota)) {
+                    hasAnyData = true;
+                }
             }
 
         } else {
