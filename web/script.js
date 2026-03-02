@@ -1,4 +1,3 @@
-
 function switchTab(tab) {
 
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -39,12 +38,120 @@ function addSubnote(compId) {
     const div = document.createElement('div');
     div.className = 'subnote-item';
     div.innerHTML = `
-        <input type="number" placeholder="Peso %" min="0" max="100" class="sub-peso">
+        <div class="input-suffix-wrapper">
+            <input type="number" placeholder="Peso" min="0" max="100" class="sub-peso">
+            <span class="input-suffix">%</span>
+        </div>
         <input type="number" placeholder="Nota" min="0" max="20" class="sub-nota">
         <button class="btn-remove" onclick="this.parentElement.remove()" title="Eliminar"><i data-lucide="trash-2"></i></button>
     `;
     list.appendChild(div);
     lucide.createIcons();
+}
+
+const nombresComponentes = {
+    u1: 'Unidad 1',
+    parcial: 'Examen Parcial',
+    u2: 'Unidad 2',
+    final: 'Examen Final'
+};
+
+function markInvalid(input) {
+    input.classList.add('input-error');
+    input.addEventListener('input', function handler() {
+        input.classList.remove('input-error');
+        input.removeEventListener('input', handler);
+    }, { once: true });
+}
+
+function clearAllErrors() {
+    document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+}
+
+function validateCourse() {
+    clearAllErrors();
+    let errors = [];
+    let hasAnyData = false;
+    const ids = ['u1', 'parcial', 'u2', 'final'];
+
+    for (const compId of ids) {
+        const toggle = document.getElementById(`check-sub-${compId}`);
+        const hasSubnotes = toggle ? toggle.checked : false;
+        const nombre = nombresComponentes[compId];
+
+        if (hasSubnotes) {
+            const subnotes = document.getElementById(`subnotes-list-${compId}`).children;
+
+            if (subnotes.length === 0) {
+                errors.push(`${nombre}: Activa sub-notas pero no hay ninguna añadida.`);
+                continue;
+            }
+
+            let sumaPesos = 0;
+            let tieneAlgunDato = false;
+
+            for (let item of subnotes) {
+                const pesoInput = item.querySelector('.sub-peso');
+                const notaInput = item.querySelector('.sub-nota');
+                const pesoVal = pesoInput.value.trim();
+                const notaVal = notaInput.value.trim();
+
+                // Si ambos estan vacios, saltar
+                if (pesoVal === "" && notaVal === "") continue;
+
+                tieneAlgunDato = true;
+                hasAnyData = true;
+
+                const peso = parseFloat(pesoVal);
+                const nota = parseFloat(notaVal);
+
+                // Validar peso
+                if (pesoVal === "" || isNaN(peso)) {
+                    markInvalid(pesoInput);
+                    errors.push(`${nombre}: Falta el peso en una sub-nota.`);
+                } else if (peso < 0 || peso > 100) {
+                    markInvalid(pesoInput);
+                    errors.push(`${nombre}: El peso debe estar entre 0 y 100.`);
+                } else {
+                    sumaPesos += peso;
+                }
+
+                // Validar nota
+                if (notaVal === "" || isNaN(nota)) {
+                    markInvalid(notaInput);
+                    errors.push(`${nombre}: Falta la nota en una sub-nota.`);
+                } else if (nota < 0 || nota > 20) {
+                    markInvalid(notaInput);
+                    errors.push(`${nombre}: La nota debe estar entre 0 y 20.`);
+                }
+            }
+
+            if (tieneAlgunDato && Math.abs(sumaPesos - 100) > 0.01) {
+                // Marcar todos los pesos de esta unidad
+                for (let item of subnotes) {
+                    markInvalid(item.querySelector('.sub-peso'));
+                }
+                errors.push(`${nombre}: Los pesos suman ${sumaPesos.toFixed(1)}%, deben sumar 100%.`);
+            }
+
+        } else {
+            const input = document.getElementById(`nota-${compId}`);
+            if (input && input.value.trim() !== "") {
+                hasAnyData = true;
+                const nota = parseFloat(input.value);
+                if (isNaN(nota) || nota < 0 || nota > 20) {
+                    markInvalid(input);
+                    errors.push(`${nombre}: La nota debe estar entre 0 y 20.`);
+                }
+            }
+        }
+    }
+
+    if (!hasAnyData) {
+        errors.push("Ingresa al menos una nota para calcular.");
+    }
+
+    return errors;
 }
 
 function calculateComponent(compId) {
@@ -85,6 +192,13 @@ function calculateComponent(compId) {
 }
 
 function calculateCourse() {
+    // Validar antes de calcular
+    const errors = validateCourse();
+    if (errors.length > 0) {
+        showToast(errors[0], "error");
+        return;
+    }
+
     let sumaPuntos = 0;
     let sumaProcentaje = 0;
 
@@ -253,13 +367,10 @@ function calculatePga() {
 }
 
 function resetPga() {
-    // 1. Ocultar el panel de resultados
     document.getElementById('result-pga').classList.add('hidden');
 
-    // 2. Vaciar toda la lista de cursos
     document.getElementById('pga-courses-list').innerHTML = '';
 
-    // 3. Añadir una fila vacía para empezar de nuevo
     addPgaCourse();
 
     showToast('Calculadora de PGA reiniciada', 'success');
